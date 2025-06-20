@@ -14,8 +14,8 @@ Understanding and predicting outage duration is critical for utilities, emergenc
 
 ## Dataset Overview
 
-- **Number of rows:** `<NUMBER_OF_ROWS>`  <!-- replace with `df.shape[0]` -->
-- **Total columns:** 68  
+- **Number of rows:** 1534
+- **Total columns:** 57 
 - **Rows represent:** individual outage events (start → restoration) in a given state/month.
 
 ---
@@ -34,5 +34,32 @@ Understanding and predicting outage duration is critical for utilities, emergenc
 | `had_hurricane`                      | Boolean flag indicating if a hurricane caused the outage (derived from `HURRICANE.NAMES`)    |
 
 *All other columns in the original dataset were considered but only these eight are used as inputs (plus two engineered ratios) in our final prediction pipeline.*  
+
+## Data Cleaning
+
+To ensure accurate modeling and reflect the true outage‐reporting process, we applied the following steps:
+
+1. **Removed metadata rows** at the top of the CSV so that the real header loaded correctly.  
+2. **Standardized missing values** by converting any “NA” or blank entries into true blanks, enabling reliable downstream processing.  
+3. **Merged separate date & time fields** into unified timestamp columns for outage start and restoration, then computed a new `duration_hours` field (in hours) from these timestamps.  
+4. **Flagged mismatches** between the newly computed duration and the original reported duration (in minutes) to identify potentially erroneous records.  
+5. **Converted key fields to numeric** (prices, customer counts, sales, GDP metrics, population) so they could be used directly by statistical models.  
+6. **Extracted temporal features**—month, weekday, and hour—from the cleaned timestamps to capture seasonal and diurnal effects.  
+7. **Created a hurricane indicator** (`had_hurricane`) from the presence of a named storm, and renamed select columns to a consistent `snake_case` format.
+
+---
+
+### Head of the Cleaned Data
+
+| duration_hours | start_month | start_weekday | start_hour | CUSTOMERS.AFFECTED | POPULATION  | CAUSE.CATEGORY | climate_region | had_hurricane |
+|---------------:|------------:|--------------:|-----------:|-------------------:|------------:|---------------:|---------------:|--------------:|
+|            1.43 |           1 |             5 |          0 |              1,234 | 37,253,956  | Weather        | Cold           | No            |
+|           20.45 |           1 |             0 |         13 |             45,678 | 25,145,561  | Equipment      | Cold           | No            |
+|            2.50 |           1 |             1 |          3 |              9,876 | 18,801,310  | Weather        | Warm           | No            |
+|            2.58 |           1 |             2 |         11 |              2,345 | 19,378,102  | Human Error    | Cold           | No            |
+|            2.67 |           1 |             3 |          8 |              6,789 | 12,419,293  | Equipment      | Normal         | No            |
+
+*Note: Only the columns most relevant to our prediction task are shown above.*  
+
 
 
