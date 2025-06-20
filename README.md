@@ -51,15 +51,62 @@ To ensure accurate modeling and reflect the true outage‐reporting process, we 
 
 ### Head of the Cleaned Data
 
-| duration_hours | start_month | start_weekday | start_hour | CUSTOMERS.AFFECTED | POPULATION  | CAUSE.CATEGORY | climate_region | had_hurricane |
-|---------------:|------------:|--------------:|-----------:|-------------------:|------------:|---------------:|---------------:|--------------:|
-|            1.43 |           1 |             5 |          0 |              1,234 | 37,253,956  | Weather        | Cold           | No            |
-|           20.45 |           1 |             0 |         13 |             45,678 | 25,145,561  | Equipment      | Cold           | No            |
-|            2.50 |           1 |             1 |          3 |              9,876 | 18,801,310  | Weather        | Warm           | No            |
-|            2.58 |           1 |             2 |         11 |              2,345 | 19,378,102  | Human Error    | Cold           | No            |
-|            2.67 |           1 |             3 |          8 |              6,789 | 12,419,293  | Equipment      | Normal         | No            |
+<div style="overflow-x:auto; text-align:center;">
 
-*Note: Only the columns most relevant to our prediction task are shown above.*  
+<table style="margin-left:auto; margin-right:auto; border-collapse: collapse;">
+  <thead>
+    <tr>
+      <th style="padding:8px; border:1px solid #ddd;">duration_hours</th>
+      <th style="padding:8px; border:1px solid #ddd;">start_month</th>
+      <th style="padding:8px; border:1px solid #ddd;">start_weekday</th>
+      <th style="padding:8px; border:1px solid #ddd;">start_hour</th>
+      <th style="padding:8px; border:1px solid #ddd;">CUSTOMERS.AFFECTED</th>
+      <th style="padding:8px; border:1px solid #ddd;">POPULATION</th>
+      <th style="padding:8px; border:1px solid #ddd;">CAUSE.CATEGORY</th>
+      <th style="padding:8px; border:1px solid #ddd;">climate_region</th>
+      <th style="padding:8px; border:1px solid #ddd;">had_hurricane</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="padding:8px; border:1px solid #ddd;">1.43</td>
+      <td style="padding:8px; border:1px solid #ddd;">1</td>
+      <td style="padding:8px; border:1px solid #ddd;">5</td>
+      <td style="padding:8px; border:1px solid #ddd;">0</td>
+      <td style="padding:8px; border:1px solid #ddd;">1,234</td>
+      <td style="padding:8px; border:1px solid #ddd;">37,253,956</td>
+      <td style="padding:8px; border:1px solid #ddd;">Weather</td>
+      <td style="padding:8px; border:1px solid #ddd;">Cold</td>
+      <td style="padding:8px; border:1px solid #ddd;">No</td>
+    </tr>
+    <tr>
+      <td style="padding:8px; border:1px solid #ddd;">20.45</td>
+      <td style="padding:8px; border:1px solid #ddd;">1</td>
+      <td style="padding:8px; border:1px solid #ddd;">0</td>
+      <td style="padding:8px; border:1px solid #ddd;">13</td>
+      <td style="padding:8px; border:1px solid #ddd;">45,678</td>
+      <td style="padding:8px; border:1px solid #ddd;">25,145,561</td>
+      <td style="padding:8px; border:1px solid #ddd;">Equipment</td>
+      <td style="padding:8px; border:1px solid #ddd;">Cold</td>
+      <td style="padding:8px; border:1px solid #ddd;">No</td>
+    </tr>
+    <tr>
+      <td style="padding:8px; border:1px solid #ddd;">2.50</td>
+      <td style="padding:8px; border:1px solid #ddd;">1</td>
+      <td style="padding:8px; border:1px solid #ddd;">1</td>
+      <td style="padding:8px; border:1px solid #ddd;">3</td>
+      <td style="padding:8px; border:1px solid #ddd;">9,876</td>
+      <td style="padding:8px; border:1px solid #ddd;">18,801,310</td>
+      <td style="padding:8px; border:1px solid #ddd;">Weather</td>
+      <td style="padding:8px; border:1px solid #ddd;">Warm</td>
+      <td style="padding:8px; border:1px solid #ddd;">No</td>
+    </tr>
+    <!-- More rows as needed -->
+  </tbody>
+</table>
+
+</div>
+
 
 
 
