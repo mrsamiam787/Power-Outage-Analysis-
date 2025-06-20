@@ -107,6 +107,26 @@ To ensure accurate modeling and reflect the true outage‐reporting process, we 
 
 </div>
 
+### Distribution of Outage Durations
 
+```python
+import plotly.express as px
+
+# Histogram of the target variable
+fig = px.histogram(
+    df, 
+    x="duration_hours", 
+    nbins=50, 
+    title="Distribution of Power Outage Durations"
+)
+fig.update_layout(
+    xaxis_title="Duration (hours)",
+    yaxis_title="Number of Outages",
+    bargap=0.1
+)
+fig.show()
+```
+
+This histogram reveals that most power outages last only a few hours, with a steep drop‐off in frequency as duration increases. The long right‐hand tail of the distribution confirms that there are occasional multi‐day events—capturing these rare but extreme cases is crucial to improving our prediction accuracy.
 
 
