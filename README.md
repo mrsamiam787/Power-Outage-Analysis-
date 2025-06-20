@@ -132,4 +132,4 @@ To ensure accurate modeling and reflect the true outage‐reporting process, we 
   <p>This scatter + LOWESS line shows…</p>
 </section>
 
-
+bal
