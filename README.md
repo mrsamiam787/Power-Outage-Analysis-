@@ -107,7 +107,6 @@ To ensure accurate modeling and reflect the true outage‐reporting process, we 
 
 </div>
 
-### Distribution of Outage Durations
 
 <section id="univariate-plot">
   <h3>Distribution of Outage Durations</h3>
