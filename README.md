@@ -129,7 +129,7 @@ To ensure accurate modeling and reflect the true outage‐reporting process, we 
 
 ### Outage Statistics by Cause Category
 
-We summarize key statistics for each outage cause to understand which types of events tend to last longest and affect the most customers.
+We summarize key statistics for each outage cause to understand which event types drive long interruptions and large customer impact.
 
 <div style="overflow-x:auto; text-align:center;">
 
@@ -148,19 +148,72 @@ We summarize key statistics for each outage cause to understand which types of e
   <tbody>
     <tr>
       <td style="padding:8px; border:1px solid #ddd;">Fuel Supply Emergency</td>
-      <td style="padding:8px; border:1px solid #ddd; text-align:right;">51</td>
+      <td style="padding:8px; border:1px solid #ddd; text-align:right;">38</td>
       <td style="padding:8px; border:1px solid #ddd; text-align:right;">224.9</td>
       <td style="padding:8px; border:1px solid #ddd; text-align:right;">66.0</td>
       <td style="padding:8px; border:1px solid #ddd; text-align:right;">443.3</td>
       <td style="padding:8px; border:1px solid #ddd; text-align:right;">1</td>
-      <td style="padding:8px; border:1px solid #ddd; text-align:right;">0.02</td>
+      <td style="padding:8px; border:1px solid #ddd; text-align:right;">0.14</td>
     </tr>
-    <!-- other rows unchanged -->
+    <tr>
+      <td style="padding:8px; border:1px solid #ddd;">Severe Weather</td>
+      <td style="padding:8px; border:1px solid #ddd; text-align:right;">744</td>
+      <td style="padding:8px; border:1px solid #ddd; text-align:right;">64.7</td>
+      <td style="padding:8px; border:1px solid #ddd; text-align:right;">41.0</td>
+      <td style="padding:8px; border:1px solid #ddd; text-align:right;">156.8</td>
+      <td style="padding:8px; border:1px solid #ddd; text-align:right;">135,000,000</td>
+      <td style="padding:8px; border:1px solid #ddd; text-align:right;">188,575</td>
+    </tr>
+    <tr>
+      <td style="padding:8px; border:1px solid #ddd;">Equipment Failure</td>
+      <td style="padding:8px; border:1px solid #ddd; text-align:right;">55</td>
+      <td style="padding:8px; border:1px solid #ddd; text-align:right;">30.3</td>
+      <td style="padding:8px; border:1px solid #ddd; text-align:right;">3.68</td>
+      <td style="padding:8px; border:1px solid #ddd; text-align:right;">15.5</td>
+      <td style="padding:8px; border:1px solid #ddd; text-align:right;">3,060,000</td>
+      <td style="padding:8px; border:1px solid #ddd; text-align:right;">101,936</td>
+    </tr>
+    <tr>
+      <td style="padding:8px; border:1px solid #ddd;">Public Appeal</td>
+      <td style="padding:8px; border:1px solid #ddd; text-align:right;">69</td>
+      <td style="padding:8px; border:1px solid #ddd; text-align:right;">24.5</td>
+      <td style="padding:8px; border:1px solid #ddd; text-align:right;">7.58</td>
+      <td style="padding:8px; border:1px solid #ddd; text-align:right;">58.6</td>
+      <td style="padding:8px; border:1px solid #ddd; text-align:right;">160,000</td>
+      <td style="padding:8px; border:1px solid #ddd; text-align:right;">7,619</td>
+    </tr>
+    <tr>
+      <td style="padding:8px; border:1px solid #ddd;">System Disruption</td>
+      <td style="padding:8px; border:1px solid #ddd; text-align:right;">123</td>
+      <td style="padding:8px; border:1px solid #ddd; text-align:right;">12.2</td>
+      <td style="padding:8px; border:1px solid #ddd; text-align:right;">3.58</td>
+      <td style="padding:8px; border:1px solid #ddd; text-align:right;">30.2</td>
+      <td style="padding:8px; border:1px solid #ddd; text-align:right;">17,500,000</td>
+      <td style="padding:8px; border:1px solid #ddd; text-align:right;">211,066</td>
+    </tr>
+    <tr>
+      <td style="padding:8px; border:1px solid #ddd;">Intentional Attack</td>
+      <td style="padding:8px; border:1px solid #ddd; text-align:right;">403</td>
+      <td style="padding:8px; border:1px solid #ddd; text-align:right;">7.17</td>
+      <td style="padding:8px; border:1px solid #ddd; text-align:right;">0.93</td>
+      <td style="padding:8px; border:1px solid #ddd; text-align:right;">21.2</td>
+      <td style="padding:8px; border:1px solid #ddd; text-align:right;">356,000</td>
+      <td style="padding:8px; border:1px solid #ddd; text-align:right;">1,791</td>
+    </tr>
+    <tr>
+      <td style="padding:8px; border:1px solid #ddd;">Islanding</td>
+      <td style="padding:8px; border:1px solid #ddd; text-align:right;">44</td>
+      <td style="padding:8px; border:1px solid #ddd; text-align:right;">3.34</td>
+      <td style="padding:8px; border:1px solid #ddd; text-align:right;">1.29</td>
+      <td style="padding:8px; border:1px solid #ddd; text-align:right;">11.3</td>
+      <td style="padding:8px; border:1px solid #ddd; text-align:right;">210,000</td>
+      <td style="padding:8px; border:1px solid #ddd; text-align:right;">6,169</td>
+    </tr>
   </tbody>
 </table>
 </div>
 
 **Significance:**  
-- **Fuel Supply Emergencies** are relatively rare (only 51 events) but have by far the longest durations (mean ≈225 hrs, 90th pct ≈443 hrs).  
-- The extremely low “Total Customers Affected” (1) reflects missing customer‐count data for these events, not that they literally affect only one person. We retain it to highlight data gaps.  
-- **Severe Weather**, the most frequent cause, also drives the greatest total customer impact—suggesting investments in weather resilience yield the biggest benefits for reducing overall downtime.  
+- **Fuel Supply Emergencies** are rare (38 events) but exceptionally long (mean ≈225 hrs; 90th pct ≈443 hrs).  
+- The extremely low “Total Customers Affected” value (1) reflects missing data for most of those events, not actual impact.  
+- **Severe Weather** is the most frequent cause and drives the largest cumulative customer impact—making weather‐resilience investments especially high‐leverage for reducing overall downtime.  
