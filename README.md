@@ -1,4 +1,4 @@
-# How Long Do Power Outages Last In The US
+# How Long Do Power Outages Last In The US?
 This page goes into depth into my data analysis on power outage durations in the US.
 
 # Introduction
