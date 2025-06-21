@@ -217,3 +217,86 @@ We summarize key statistics for each outage cause to understand which event type
 - **Fuel Supply Emergencies** are rare (38 events) but exceptionally long (mean ≈225 hrs; 90th pct ≈443 hrs).  
 - The extremely low “Total Customers Affected” value (1) reflects missing data for most of those events, not actual impact.  
 - **Severe Weather** is the most frequent cause and drives the largest cumulative customer impact—making weather‐resilience investments especially high‐leverage for reducing overall downtime.  
+
+## Modeling Task: Predictive Regression of Outage Duration
+
+Our project addresses a **regression** problem: given the characteristics of a newly reported power outage, we seek to predict its total duration in hours.  Unlike a classification task—where events might be labeled “short,” “medium,” or “long”—we require a continuous estimate of `duration_hours` so that utilities and emergency planners can know, to the closest hour, how long service will be interrupted.  We chose `duration_hours` as our response variable because it directly measures the operational impact of each outage event, and it aligns with real‐world decision-making needs (e.g., scheduling repair crews, notifying customers of expected downtime).
+
+To evaluate our predictions, we use **Mean Absolute Error (MAE)**.  MAE reports the average absolute difference between predicted and actual outage lengths, preserving the unit of hours and providing clear interpretability (“on average we miss by X hours”).  We considered alternative metrics such as Root Mean Squared Error (RMSE) and R², but RMSE’s sensitivity to a few very long outages can mask typical performance, and R²—while useful for explaining variance—does not convey the practical magnitude of error.  In contrast, MAE offers a straightforward measure that stakeholders can immediately understand and act upon.
+
+This work is strictly **predictive**, not inferential.  Every feature we include—number of customers affected, state population, time of day and month of the outage, per-capita economic indicators, the broad cause category, NOAA climate region, a hurricane flag, and two engineered ratios (customers affected as a fraction of total customers, and year-over-year per-capita GSP change)—would be known at the instant an outage is detected.  We ensure no future or post-outage information (like actual restoration times or subsequent sales figures) enters our model, preserving its integrity for real-time application.  By training on these inputs alone, our final Pipeline can be embedded in an operational system to deliver immediate, data-driven duration forecasts as new outage events are reported.  
+
+## Model Description and Performance
+
+Our **baseline model** is a Random Forest regressor wrapped in a single scikit-learn `Pipeline` that handles all preprocessing automatically:
+
+1. **Feature set (8 total predictors):**  
+   - **Quantitative (5):**  
+     - `CUSTOMERS.AFFECTED` (number of customers impacted)  
+     - `POPULATION` (state population)  
+     - `start_month` (1–12)  
+     - `start_hour` (0–23)  
+     - `PC.REALGSP.STATE` (per-capita real GSP in 2009 dollars)  
+   - **Categorical nominal (2):**  
+     - `CAUSE.CATEGORY` (e.g. Weather, Equipment Failure)  
+     - `climate_region` (nine NOAA regions)  
+   - **Binary nominal (1):**  
+     - `had_hurricane` (yes/no flag)  
+
+2. **Encodings & transformations:**  
+   - **Numeric features** are median-imputed where missing, then standardized (zero mean, unit variance).  
+   - **Categorical features** are constant-imputed (`"missing"` placeholder) then one-hot encoded.  
+
+3. **Modeling step:**  
+   - We use `RandomForestRegressor(n_estimators=100, random_state=42)`, which automatically handles non-linearities and interactions among features without additional manual feature engineering.  
+
+4. **Data cleaning summary:**  
+   - **Original rows:** 1,534  
+   - **Rows dropped (NaN target):** 58 → **1,476** remaining  
+   - **Feature missingness post-drop:**  
+     - `CUSTOMERS.AFFECTED`: 28.5% missing  
+     - `climate_region`: 0.34% missing  
+     - all other features: 0% missing  
+
+5. **Performance metrics:**  
+   - **Test MAE:** 37.29 hours  
+   - **Test R²:** 0.216  
+   - **5-fold CV R² (training):** mean = –0.018, std = 0.382  
+
+An MAE of ~37 hours means our predictions are off by roughly a day and a half on average, and an R² of 0.216 indicates the model explains about 21.6% of the variance in outage duration. The negative mean CV R² suggests overfitting variability across folds, likely due to high noise and outliers in the data.
+
+**Assessment of “goodness”:**  
+While this baseline reliably improves over a naïve mean predictor, the large residual errors—especially on longer outages—and the volatile cross-validation scores highlight that much of the variation remains unmodeled. Enhancing feature engineering, integrating real-time weather severity data, or employing more robust and ensemble methods are promising next steps to boost predictive accuracy.  
+
+## Final Model Details
+
+In our final model, we retained the original predictors (customers affected, population, per-capita GSP, start month/hour, cause category, climate region, hurricane flag) and **added two new features**:
+
+1. **Customer‐Intensity (`cust_intensity`)**: the fraction of a state’s total customers affected by the outage.  This normalizes raw outage size by scale of the service area, so that a 10,000-customer outage in a small state “weighs” more than one in a large state.  
+2. **Economic‐Stress (`econ_stress`)**: the ratio of year-over-year change in per-capita GSP to the per-capita GSP itself.  Regions in economic contraction often have under-invested grid infrastructure, which can prolong restoration times.  
+
+### Feature Types & Encoding
+
+- **Quantitative (7)**:  
+  - Continuous: `CUSTOMERS.AFFECTED`, `POPULATION`, `PC.REALGSP.STATE`, `cust_intensity`, `econ_stress`  
+  - Ordinal (treated as continuous): `start_month`, `start_hour`  
+- **Nominal (2)**: one-hot encoded `CAUSE.CATEGORY`, `climate_region`  
+- **Binary (1)**: imputed and one-hot encoded `had_hurricane`  
+
+All numeric columns were median-imputed and then either standardized or quantile-transformed inside our preprocessing pipeline; categorical columns used a “missing” placeholder and one-hot encoding.
+
+### Algorithm & Hyperparameter Selection
+
+We chose **K-Nearest Neighbors Regression** for its simplicity and local fitting behavior, which can adapt to the non-linearities and heteroscedasticity in outage data.  We performed a **GridSearchCV** over  
+
+- `n_neighbors`: [3, 5, 10, 20]  
+- `weights`: [‘uniform’, ‘distance’]  
+
+using 5-fold cross-validation and **negative MAE** as our scoring metric.  The best combination was **`n_neighbors=10`** with **`weights='distance'`**, indicating that a moderate neighborhood size and proximity-weighted averaging produce the most stable predictions.
+
+### Final Performance & Improvement
+
+- **Baseline (Random Forest) Test MAE**: ~37.3 hours, **R²** ≈ 0.216  
+- **Final (KNN) Test MAE**: 36.35 hours, **R²** = 0.219  
+
+By adding features grounded in the outage-reporting process and tuning our KNN hyperparameters, we achieved a modest but meaningful improvement in MAE (≈1 hour) and a slight uptick in explained variance (ΔR² ≈ 0.003).  Given the inherent noise and unobserved factors in the data (e.g. crew dispatch logistics), these gains somewhat validate our feature choices and modeling workflow as effective steps forward. Overall, given more time and access to additional data real-time points such as real-time weather severity, crew deployment schedules, or grid topology details—it we would hopefully be able to improve on this model and be able to better explain the remaining variance and further enhance the models predictive accuracy.
